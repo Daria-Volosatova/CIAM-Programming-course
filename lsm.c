@@ -1,15 +1,15 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<malloc.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <string.h>
 
-#include<math.h>
+#include <math.h>
 
 // Обработка ошибок
-#include<errno.h>
+#include <errno.h>
 extern int errno;
 
-// функция, выводящая массив
+// Вывод массива
 void array_output(double** arr, size_t n, size_t m) {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
@@ -19,7 +19,7 @@ void array_output(double** arr, size_t n, size_t m) {
 	}
 }
 
-// значение аппроксимируещего полинома в точке
+// Значение аппроксимируещего полинома в точке
 double ap_pol(double x, double* p, size_t n) {
 	double result = 0;
 	for (int i = 0; i < n; i++) {
@@ -28,7 +28,7 @@ double ap_pol(double x, double* p, size_t n) {
 	return result;
 }
 
-// нахождение главного элемента столбца, обмен с текущим элементом (для метода Гаусса)
+// Поиск главного элемента столбца, обмен с текущим элементом (для метода Гаусса)
 double main_element_reverse_row(size_t k, double** arr, size_t n) {
 	int i_max = k;
 	double temp;
@@ -45,7 +45,7 @@ double main_element_reverse_row(size_t k, double** arr, size_t n) {
 
 int main() {
 
-	//считываем данные (координаты точек) и записываем их в двумерный динамический массив	
+	// Чтение данных (координат точек) и запись их в двумерный динамический массив	
 	FILE *data;
 	double *x;
 	double *y;
@@ -72,7 +72,7 @@ int main() {
 
 	count -= 1;
 
-	//вводим порядок аппроксимации
+	// Ввод порядка аппроксимации
 	printf(" \nEnter order of approximation:\n");
 	int n;
 	scanf("%d", &n);
@@ -84,7 +84,7 @@ int main() {
 		arr[i] = t + i * (n + 2);
 	}
 
-	// Заполняем матрицу коэффициентами линейной системы уравнений,
+	// Заполнение матрицы коэффициентами линейной системы уравнений,
 	// сформированной в соответствии с формулами метода наименьших квадратов
 	for (int i = 0; i < n + 1; i++) {
 		for (int j = 0; j < n + 2; j++) {
@@ -102,8 +102,7 @@ int main() {
 		}
 	}
 
-
-	//решаем систему уравнений методом Гаусса
+	// Решение системы уравнений методом Гаусса
 	int max_n;
 	double max, a;
 	double mult;
@@ -135,10 +134,10 @@ int main() {
 
 	if ((data = fopen("results.csv", "w")) == NULL) {
 		printf("Can't open: %s\n", strerror(errno));
-		return(0);
+		return EXIT_FAILURE;
 	}
 
-	//записываем результаты в файл
+	// Запись результатов в файл
 	for (int i = 0; i < count; i++) {
 		fprintf(data, "%10.3lf, %10.3lf, %10.3lf\n", x[i], y[i], ap_pol(x[i], p, n + 1));
 	}
@@ -148,5 +147,5 @@ int main() {
 	free(arr);
 	free(t);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
